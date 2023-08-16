@@ -17,7 +17,10 @@ import {
   Icon,
   Select,
 } from '@chakra-ui/react'
-
+import { useState } from 'react'
+import { useToast } from "@chakra-ui/react";
+import {useDispatch,useSelector} from 'react-redux'
+import { postuser } from '../redux/register/action';
 const avatars = [
   {
     name: 'Ryan Florence',
@@ -63,6 +66,53 @@ const Blur = (props) => {
 }
 
 export default function JoinOurTeam() {
+  const [username,setUsername]=useState("")
+  const [password,setPassword]=useState("")
+  const [role,setRole]=useState("")
+  const toast = useToast();
+  const dispatch=useDispatch()
+  const {loading,message}=useSelector((store)=>store.user)
+  console.log(loading)
+  const handleSubmit=()=>{
+    if(username!=="" && password!=="" && role!==""){
+      dispatch(postuser(username,password,role)).then((res)=>{
+        if(res.message=="Username already exists"){
+          toast({
+            title: "Username already exists, Kindly login" ,
+        
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+         });
+        }else{
+          toast({
+            title: res.message ,
+        
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+         });
+        }
+       
+      console.log(res.message)
+       
+      })
+    }else{
+      toast({
+        title: "Enter all fields" ,
+    
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+     });
+     setUsername("")
+       setPassword("")
+       setRole("")
+    }
+   
+   
+  }
+ 
   return (
     <Box position={'relative'}>
       <Container
@@ -170,6 +220,7 @@ export default function JoinOurTeam() {
                 _placeholder={{
                   color: 'gray.500',
                 }}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <Input
                type={"password"}
@@ -181,12 +232,18 @@ export default function JoinOurTeam() {
                 _placeholder={{
                   color: 'gray.500',
                 }}
+                onChange={(e) => setPassword(e.target.value)}
               />
-             <select style={{backgroundColor:'#edf2f7',height:'45px',borderRadius:'10px',fontWeight:'bold'}}>
+             {/* <select style={{backgroundColor:'#edf2f7',height:'45px',borderRadius:'10px',fontWeight:'bold'}} onChange={(e)=>setRole(e.target.value)}>
              <option value="">Who you are?</option>
                 <option value="buyer">Buyer</option>
                 <option value="buyer">Seller</option>
-             </select>
+             </select> */}
+             <Select fontWeight={'bold'} onChange={(e)=>setRole(e.target.value)} placeholder='Who you are?'>
+  <option value='buyer'>Buyer</option>
+  <option value='seller'>Seller </option>
+ 
+</Select>
              
             </Stack>
             <Button
@@ -198,7 +255,10 @@ export default function JoinOurTeam() {
               _hover={{
                 bgGradient: 'linear(to-r, red.400,pink.400)',
                 boxShadow: 'xl',
-              }}>
+              }}
+              disabled={loading}
+              onClick={handleSubmit}
+              >
               Submit
             </Button>
           </Box>
