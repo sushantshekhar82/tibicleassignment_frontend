@@ -13,8 +13,9 @@ import {
   Avatar,
   AvatarGroup,
   useBreakpointValue,
-  IconProps,
+  
   Icon,
+  Select,
 } from '@chakra-ui/react'
 
 const avatars = [
@@ -43,9 +44,9 @@ const avatars = [
 const Blur = (props) => {
   return (
     <Icon
-      width={useBreakpointValue({ base: '100%', md: '40vw', lg: '30vw' })}
+      width={useBreakpointValue({ base: '100%', md: '40vw', lg: '25vw' })}
       zIndex={useBreakpointValue({ base: -1, md: -1, lg: 0 })}
-      height="560px"
+      height="540px"
       viewBox="0 0 528 560"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -74,11 +75,11 @@ export default function JoinOurTeam() {
           <Heading
             lineHeight={1.1}
             fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
-            Senior web designers{' '}
+            Buy Anything from {' '}
             <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
-              &
+             Vending Machine
             </Text>{' '}
-            Full-Stack Developers
+           and Enjoy 
           </Heading>
           <Stack direction={'row'} spacing={4} align={'center'}>
             <AvatarGroup>
@@ -147,48 +148,46 @@ export default function JoinOurTeam() {
               color={'gray.800'}
               lineHeight={1.1}
               fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-              Join our team
+              Join Now
               <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
                 !
               </Text>
             </Heading>
             <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-              We’re looking for amazing engineers just like you! Become a part of our
-              rockstar engineering team and skyrocket your career!
+             We're here to provie you the services to sell your item to local consumer and for consumer , they can buy that 
+             item very easily.
             </Text>
           </Stack>
           <Box as={'form'} mt={10}>
             <Stack spacing={4}>
               <Input
-                placeholder="Firstname"
+               type={"text"}
+                placeholder="Username/Email"
                 bg={'gray.100'}
                 border={0}
-                color={'gray.500'}
+                color={'black'}
+                fontWeight='bold'
                 _placeholder={{
                   color: 'gray.500',
                 }}
               />
               <Input
-                placeholder="firstname@lastname.io"
+               type={"password"}
+                placeholder="Password"
                 bg={'gray.100'}
                 border={0}
-                color={'gray.500'}
+                color={'black'}
+                fontWeight='bold'
                 _placeholder={{
                   color: 'gray.500',
                 }}
               />
-              <Input
-                placeholder="+1 (___) __-___-___"
-                bg={'gray.100'}
-                border={0}
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
-                }}
-              />
-              <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'}>
-                Upload CV
-              </Button>
+             <select style={{backgroundColor:'#edf2f7',height:'45px',borderRadius:'10px',fontWeight:'bold'}}>
+             <option value="">Who you are?</option>
+                <option value="buyer">Buyer</option>
+                <option value="buyer">Seller</option>
+             </select>
+             
             </Stack>
             <Button
               fontFamily={'heading'}
