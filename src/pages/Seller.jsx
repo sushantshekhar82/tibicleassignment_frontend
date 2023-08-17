@@ -30,6 +30,8 @@ import {
   Tbody,
   Td,
   Button,
+  Input,
+  useToast,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -59,7 +61,7 @@ const adminUsername=localStorage.getItem('user')
 const LinkItems = [
   { name: 'Home',href:"/seller", icon: FiHome },
   { name: 'Add Products',href:"/seller/add_product", icon: FiTrendingUp },
-  { name: 'Orders',href:"/seller/order", icon: FiStar },
+ 
   
 ]
 
@@ -212,6 +214,13 @@ const Seller = () => {
   const [products,setProducts]=useState([])
   const token=localStorage.getItem("token")
   const id=localStorage.getItem("userid")
+  const[productname,setProductName]=useState("")
+  const[cost,setCost]=useState("")
+  const[quantity,setQuantity]=useState("")
+  const toast = useToast();
+  const [count,setCount]=useState(0)
+  const [loading,setLoading]=useState(false)
+ const [activeid,setActiveId]=useState("")
   useEffect(()=>{
     fetch(`http://localhost:8080/api/prod/products/seller/${id}`, {
         headers: {
@@ -220,9 +229,76 @@ const Seller = () => {
       })
         .then((res) => res.json())
         .then((res) => {
+          setLoading(true)
            setProducts(res)
-        })},[token])
-        console.log(products)
+           setLoading(false)
+        })},[token,count])
+       
+      useEffect(()=>{
+        fetch(`http://localhost:8080/api/prod/products/${activeid}`, {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            console.log(res)
+            setProductName(res.productName)
+            setQuantity(res.amountAvailable)
+            setCost(res.cost)
+          })
+      },[activeid])
+    const handleUpdateProduct=()=>{
+      const productData = {
+        productName:productname,
+        cost,
+        amountAvailable:quantity
+      };
+    fetch(`http://localhost:8080/api/prod/products/${activeid}`,  {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(productData)
+  })
+    .then((res) => res.json())
+    .then((res) => {
+     if(res.message==="Product updated successfully"){
+      toast({
+        title: "Product Updated Succssfully" ,
+    
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+     });
+     setCount(count+1)
+     }
+    }) 
+   
+    }  
+    const handleDelete=(id)=>{
+      fetch(`http://localhost:8080/api/prod/products/${id}`,  {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${localStorage.getItem("token")}`,
+        }
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if(res.message==="Product deleted successfully"){
+            toast({
+              title: "Product deleted successfully" ,
+          
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+           });
+           setCount(count+1)
+           }
+        })
+    }
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
@@ -254,7 +330,7 @@ const Seller = () => {
     </Thead>
     <Tbody>
       {
-        products.map((el)=>(
+       products.map((el)=>(
           <Tr>
           <Td>{el.productName}</Td>
           <Td>{el.cost}</Td>
@@ -264,8 +340,11 @@ const Seller = () => {
               <Button bg={'pink.600'} color={'white'} onClick={() => {
           setSelectedProduct(el);
           setIsModalOpen(true);
+          setActiveId(el._id)
         }} >Edit</Button>
-              <Button bg={'red.600'} color={'white'}>Delete</Button>
+              <Button bg={'red.600'} color={'white'} onClick={()=>{
+                handleDelete(el._id)
+              }}>Delete</Button>
             </Flex>
           </Td>
         </Tr>
@@ -279,11 +358,18 @@ const Seller = () => {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit Product</ModalHeader>
+          <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
            
-            use client
+          <Box margin={'auto'} padding={'10px'} borderRadius={'20px'} backgroundColor={'white'}>
+           <Text as={'h1'} fontSize={'5xl'} fontWeight={'bold'} textAlign={'center'}>Edit Product</Text>
+           <Input marginTop={'20px'} type='text' value={productname} onChange={(e)=>setProductName(e.target.value)} placeholder='Product Name' size='lg' />
+           <Input marginTop={'20px'} type='number' value={cost} onChange={(e)=>setCost(e.target.value)} placeholder='Cost' size='lg' />
+           <Input marginTop={'20px'} type='number' value={quantity} onChange={(e)=>setQuantity(e.target.value)} placeholder='Quantity' size='lg' />
+           <Button  marginTop={'20px'} bg={'pink.600'} color={'white'} onClick={handleUpdateProduct}>Add Product</Button>
+              
+          </Box>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>

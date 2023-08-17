@@ -52,7 +52,7 @@ const adminUsername=localStorage.getItem('user')
 const LinkItems = [
     { name: 'Home',href:"/seller", icon: FiHome },
     { name: 'Add Products',href:"/seller/add_product", icon: FiTrendingUp },
-    { name: 'Orders',href:"/seller/order", icon: FiStar },
+   
     
   ]
 
