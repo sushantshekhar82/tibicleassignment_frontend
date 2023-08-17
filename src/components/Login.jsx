@@ -103,6 +103,7 @@ export default function JoinOurTeam() {
             duration: 3000,
             isClosable: true,
          });
+         localStorage.setItem("userid",res.userid)
          localStorage.setItem("token",res.token)
          localStorage.setItem("role",res.role)
          localStorage.setItem("user",res.uniqueuser)

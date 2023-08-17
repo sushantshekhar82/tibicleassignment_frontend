@@ -30,6 +30,8 @@ import {
   Tbody,
   Td,
   Button,
+  Input,
+  useToast,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -48,11 +50,11 @@ import { useEffect, useState } from 'react'
 const adminUsername=localStorage.getItem('user')
 
 const LinkItems = [
-  { name: 'Home',href:"/seller", icon: FiHome },
-  { name: 'Add Products',href:"/seller/add_product", icon: FiTrendingUp },
-  { name: 'Orders',href:"/seller/order", icon: FiStar },
-  
-]
+    { name: 'Home',href:"/seller", icon: FiHome },
+    { name: 'Add Products',href:"/seller/add_product", icon: FiTrendingUp },
+    { name: 'Orders',href:"/seller/order", icon: FiStar },
+    
+  ]
 
 const SidebarContent = ({ onClose, ...rest }) => {
   return (
@@ -72,11 +74,11 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <Link to={link.href}>
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-        </Link>
+       <Link to={link.href}>
+       <NavItem key={link.name} icon={link.icon}>
+         {link.name}
+       </NavItem>
+       </Link>
       ))}
     </Box>
   )
@@ -196,22 +198,59 @@ const MobileNav = ({ onOpen, ...rest }) => {
   )
 }
 
-const Seller = () => {
+const SellerProductAdd = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [products,setProducts]=useState([])
-  const token=localStorage.getItem("token")
-  const id=localStorage.getItem("userid")
-  useEffect(()=>{
-    fetch(`http://localhost:8080/api/prod/products/seller/${id}`, {
+  const[productname,setProductName]=useState("")
+  const[cost,setCost]=useState("")
+  const[quantity,setQuantity]=useState("")
+  const toast = useToast();
+  const token = localStorage.getItem("token");
+  const handleAddProduct=()=>{
+     console.log(productname,cost,quantity)
+     if(productname!=="" && cost!=="" && quantity!==""){
+        const productData = {
+            productName:productname,
+            cost,
+            amountAvailable:quantity
+          };
+        fetch(`http://localhost:8080/api/prod/products`,  {
+        method: 'POST',
         headers: {
-          Authorization: `${localStorage.getItem("token")}`,
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`,
         },
+        body: JSON.stringify(productData)
       })
         .then((res) => res.json())
         .then((res) => {
-           setProducts(res)
-        })},[token])
-        console.log(products)
+            if(res.message==="Product added successfully"){
+                toast({
+                    title: "Product Added Succssfully" ,
+                
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                 });
+            }
+        })
+       
+         setProductName("")
+     setCost("")
+     setQuantity("")
+     }else{
+        toast({
+            title: "Enter all fields " ,
+        
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+         });
+     }
+     
+  }
+   
+
+ 
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
       <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
@@ -228,42 +267,18 @@ const Seller = () => {
       </Drawer>
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-
-      <TableContainer>
-  <Table variant='striped' colorScheme='teal'>
-    <TableCaption>All Products</TableCaption>
-    <Thead>
-      <Tr>
-        <Th>Product Name</Th>
-        <Th>cost</Th>
-        <Th>Items Available</Th>
-        <Th>Options</Th>
-      </Tr>
-    </Thead>
-    <Tbody>
-      {
-        products.map((el)=>(
-          <Tr>
-          <Td>{el.productName}</Td>
-          <Td>{el.cost}</Td>
-          <Td>{el.amountAvailable}</Td>
-          <Td>
-            <Flex gap={'10px'}>
-              <Button bg={'pink.600'} color={'white'}>Edit</Button>
-              <Button bg={'red.600'} color={'white'}>Delete</Button>
-            </Flex>
-          </Td>
-        </Tr>
-        ))
-      }
-   
-      </Tbody>
-      </Table>
-      </TableContainer>
+      <Box ml={{ base: 0, md: 60 }} p="50" >
+          <Box margin={'auto'} padding={'10px'} borderRadius={'20px'} backgroundColor={'white'} width={'500px'} height={'500px'}>
+           <Text as={'h1'} fontSize={'5xl'} fontWeight={'bold'} textAlign={'center'}>Add Products</Text>
+           <Input marginTop={'20px'} type='text' value={productname} onChange={(e)=>setProductName(e.target.value)} placeholder='Product Name' size='lg' />
+           <Input marginTop={'20px'} type='number' value={cost} onChange={(e)=>setCost(e.target.value)} placeholder='Cost' size='lg' />
+           <Input marginTop={'20px'} type='number' value={quantity} onChange={(e)=>setQuantity(e.target.value)} placeholder='Quantity' size='lg' />
+           <Button  marginTop={'20px'} bg={'pink.600'} color={'white'} onClick={handleAddProduct}>Add Product</Button>
+              
+          </Box>
       </Box>
     </Box>
   )
 }
 
-export default Seller
+export default SellerProductAdd
