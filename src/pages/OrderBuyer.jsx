@@ -237,7 +237,7 @@ const handleDeposit = async () => {
     if(amount==5||amount==10||amount==20||amount==50||amount==100){
         try {
   
-            await axios.post(`http://localhost:8080/api/vending-machine/deposit`, { coins: [parseInt(amount)] }, {
+            await axios.post(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/vending-machine/deposit`, { coins: [parseInt(amount)] }, {
               headers: {
                 Authorization: `${localStorage.getItem("token")}`
               }
@@ -266,7 +266,7 @@ const handleDeposit = async () => {
  
 }
  useEffect(()=>{
-  fetch(`http://localhost:8080/api/vending-machine/purchase-history`,{
+  fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/vending-machine/purchase-history`,{
     headers: {
       Authorization: `${localStorage.getItem("token")}`
     }
@@ -277,7 +277,7 @@ const handleDeposit = async () => {
          setProducts(res)
         
       })
-      fetch(`  http://localhost:8080/api/user/${id}`)
+      fetch(`  https://wild-puce-basket-clam-boot.cyclic.cloud/api/user/${id}`)
       .then((res) => res.json())
       .then((res) => {
      

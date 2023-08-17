@@ -230,14 +230,14 @@ const Buyer = () => {
  const [activeid,setActiveId]=useState("")
 const [deposit,setDeposit]=useState(0)
  useEffect(()=>{
-  fetch(`http://localhost:8080/api/prod/products`)
+  fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/prod/products`)
       .then((res) => res.json())
       .then((res) => {
       
          setProducts(res)
         
       })
-      fetch(`  http://localhost:8080/api/user/${id}`)
+      fetch(`  https://wild-puce-basket-clam-boot.cyclic.cloud/api/user/${id}`)
       .then((res) => res.json())
       .then((res) => {
       
@@ -249,7 +249,7 @@ const [deposit,setDeposit]=useState(0)
 
 const handleBuy=async()=>{
 
-  await axios.post(`http://localhost:8080/api/vending-machine/buy/${activeid}`, { amount }, {
+  await axios.post(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/vending-machine/buy/${activeid}`, { amount }, {
     headers: {
       Authorization: `${localStorage.getItem("token")}`
     }

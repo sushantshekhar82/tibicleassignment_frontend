@@ -223,7 +223,7 @@ const Seller = () => {
   const [loading,setLoading]=useState(false)
  const [activeid,setActiveId]=useState("")
   useEffect(()=>{
-    fetch(`http://localhost:8080/api/prod/products/seller/${id}`, {
+    fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/prod/products/seller/${id}`, {
         headers: {
           Authorization: `${localStorage.getItem("token")}`,
         },
@@ -236,7 +236,7 @@ const Seller = () => {
         })},[token,count])
        
       useEffect(()=>{
-        fetch(`http://localhost:8080/api/prod/products/${activeid}`, {
+        fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/prod/products/${activeid}`, {
           headers: {
             Authorization: `${localStorage.getItem("token")}`,
           },
@@ -255,7 +255,7 @@ const Seller = () => {
         cost,
         amountAvailable:quantity
       };
-    fetch(`http://localhost:8080/api/prod/products/${activeid}`,  {
+    fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/prod/products/${activeid}`,  {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -279,7 +279,7 @@ const Seller = () => {
    
     }  
     const handleDelete=(id)=>{
-      fetch(`http://localhost:8080/api/prod/products/${id}`,  {
+      fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/prod/products/${id}`,  {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

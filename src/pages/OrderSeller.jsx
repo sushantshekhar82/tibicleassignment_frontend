@@ -209,7 +209,7 @@ const OrderSeller = () => {
   const token = localStorage.getItem("token");
   const [products,setProducts]=useState([])
   useEffect(()=>{
-    fetch(`http://localhost:8080/api/vending-machine/purchase-history/seller/${id}`,{
+    fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/vending-machine/purchase-history/seller/${id}`,{
       headers: {
         Authorization: `${localStorage.getItem("token")}`
       }
@@ -231,7 +231,7 @@ const OrderSeller = () => {
             cost,
             amountAvailable:quantity
           };
-        fetch(`http://localhost:8080/api/prod/products`,  {
+        fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/prod/products`,  {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -214,7 +214,7 @@ const SellerProductAdd = () => {
             cost,
             amountAvailable:quantity
           };
-        fetch(`http://localhost:8080/api/prod/products`,  {
+        fetch(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/prod/products`,  {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

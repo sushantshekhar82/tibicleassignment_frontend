@@ -5,7 +5,7 @@ export const loginuser = (username,password) =>async (dispatch) => {
   dispatch({ type: types.USER_LOADING });
   try {
     let res = await axios
-    .post(`http://localhost:8080/api/user/login`,{
+    .post(`https://wild-puce-basket-clam-boot.cyclic.cloud/api/user/login`,{
       username,
       password
     }) 
