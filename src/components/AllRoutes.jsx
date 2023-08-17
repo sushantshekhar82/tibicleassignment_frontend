@@ -5,6 +5,7 @@ import Login from '../pages/Login'
 import Seller from '../pages/Seller'
 import Buyer from '../pages/Buyer'
 import SellerProductAdd from '../pages/SellerProductAdd'
+import Deposit from '../pages/Deposit'
 const AllRoutes = () => {
   return (
    <Routes>
@@ -13,6 +14,8 @@ const AllRoutes = () => {
          <Route path='/seller' element={<Seller/>}/>
          <Route path='/buyer' element={<Buyer/>}/>
          <Route path='/seller/add_product' element={<SellerProductAdd/>}/>
+         <Route path='/buyer/deposit' element={<Deposit/>}/>
+
    </Routes>
   )
 }

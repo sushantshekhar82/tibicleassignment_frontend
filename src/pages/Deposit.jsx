@@ -32,6 +32,8 @@ import {
   Button,
   Input,
   useToast,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -55,6 +57,7 @@ import {
 import { IconType } from 'react-icons'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const adminUsername=localStorage.getItem('user')
 
@@ -210,7 +213,7 @@ const MobileNav = ({ onOpen,...rest }) => {
   )
 }
 
-const Buyer = () => {
+const Deposit = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -226,6 +229,41 @@ const Buyer = () => {
   const [loading,setLoading]=useState(false)
  const [activeid,setActiveId]=useState("")
 const [deposit,setDeposit]=useState(0)
+const [amount, setAmount] = useState("");
+
+const handleDeposit = async () => {
+    console.log(amount)
+    if(amount==5||amount==10||amount==20||amount==50||amount==10){
+        try {
+  
+            await axios.post(`http://localhost:8080/api/vending-machine/deposit`, { coins: [parseInt(amount)] }, {
+              headers: {
+                Authorization: `${localStorage.getItem("token")}`
+              }
+            });
+            toast({
+                title: "Deposit Successfully" ,
+            
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+             });
+           setCount(count+1)
+            setAmount('');
+          } catch (error) {
+            console.error(error);
+          }
+    }else{
+        toast({
+            title: "We don't accept this amount" ,
+        
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+         });
+    }
+ 
+}
  useEffect(()=>{
   fetch(`http://localhost:8080/api/prod/products`)
       .then((res) => res.json())
@@ -262,35 +300,21 @@ const [deposit,setDeposit]=useState(0)
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} deposit={deposit} />
       <Box ml={{ base: 0, md: 60 }} p="4">
-
-      <TableContainer>
-  <Table variant='striped' colorScheme='teal'>
-    <TableCaption>All Products</TableCaption>
-    <Thead>
-      <Tr>
-        <Th>Product Name</Th>
-        <Th>cost</Th>
-        <Th>Items Available</Th>
-        <Th>Options</Th>
-      </Tr>
-    </Thead>
-    <Tbody>
-      {
-       products.map((el)=>(
-          <Tr>
-          <Td>{el.productName}</Td>
-          <Td>{el.cost}</Td>
-          <Td>{el.amountAvailable}</Td>
-          <Td>
-            <Button bg={'green.500'} color={'white'}>Buy</Button>
-          </Td>
-        </Tr>
-        ))
-      }
-   
-      </Tbody>
-      </Table>
-      </TableContainer>
+      <Box margin={'auto'} padding={'10px'} borderRadius={'20px'} backgroundColor={'white'} width={'500px'} height={'500px'}>
+           <Text as={'h1'} fontSize={'5xl'} fontWeight={'bold'} textAlign={'center'}>Deposit Money</Text>
+           <VStack spacing={4}>
+        <FormControl>
+         
+          <Input
+            type="number"
+            placeholder='Accept only 5 10 20 50 100'
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </FormControl>
+        <Button colorScheme="teal" onClick={handleDeposit}>Deposit</Button>
+      </VStack>
+          </Box>
       </Box>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
@@ -312,4 +336,4 @@ const [deposit,setDeposit]=useState(0)
   )
 }
 
-export default Buyer
+export default Deposit
