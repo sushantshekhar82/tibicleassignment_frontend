@@ -62,8 +62,8 @@ const adminUsername=localStorage.getItem('user')
 
 const LinkItems = [
   { name: 'Home',href:"/buyer", icon: FiHome },
-  { name: 'Deposit Money',href:"/buyer/deposit", icon: FiTrendingUp }
- 
+  { name: 'Deposit Money',href:"/buyer/deposit", icon: FiTrendingUp },
+  { name: 'Order',href:"/buyer/order",icon: FiStar}
   
 ]
 

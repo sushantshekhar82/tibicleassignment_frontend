@@ -213,7 +213,7 @@ const MobileNav = ({ onOpen,...rest }) => {
   )
 }
 
-const Deposit = () => {
+const OrderBuyer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -265,7 +265,11 @@ const handleDeposit = async () => {
  
 }
  useEffect(()=>{
-  fetch(`http://localhost:8080/api/prod/products`)
+  fetch(`http://localhost:8080/api/vending-machine/purchase-history`,{
+    headers: {
+      Authorization: `${localStorage.getItem("token")}`
+    }
+  })
       .then((res) => res.json())
       .then((res) => {
        console.log(res)
@@ -300,21 +304,33 @@ const handleDeposit = async () => {
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} deposit={deposit} />
       <Box ml={{ base: 0, md: 60 }} p="4">
-      <Box margin={'auto'} padding={'10px'} borderRadius={'20px'} backgroundColor={'white'} width={'500px'} height={'500px'}>
-           <Text as={'h1'} fontSize={'5xl'} fontWeight={'bold'} textAlign={'center'}>Deposit Money</Text>
-           <VStack spacing={4}>
-        <FormControl>
+      
+      <TableContainer>
+  <Table variant='striped' colorScheme='teal'>
+    <TableCaption>All Products</TableCaption>
+    <Thead>
+      <Tr>
+        <Th>Product Name</Th>
+        <Th>Quantity</Th>
+        <Th>Purchase Date</Th>
+        
+      </Tr>
+    </Thead>
+    <Tbody>
+    {
+       products.map((el)=>(
+          <Tr>
+          <Td>{el.productName}</Td>
+          <Td>{el.quantity}</Td>
+          <Td>{el.purchaseDate}</Td>
          
-          <Input
-            type="number"
-            placeholder='Accept only 5 10 20 50 100'
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-        </FormControl>
-        <Button colorScheme="teal" onClick={handleDeposit}>Deposit</Button>
-      </VStack>
-          </Box>
+        </Tr>
+        ))
+      }
+   
+      </Tbody>
+      </Table>
+      </TableContainer>
       </Box>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
@@ -336,4 +352,4 @@ const handleDeposit = async () => {
   )
 }
 
-export default Deposit
+export default OrderBuyer
