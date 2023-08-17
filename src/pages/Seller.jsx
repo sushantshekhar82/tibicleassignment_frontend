@@ -41,6 +41,15 @@ import {
   FiBell,
   FiChevronDown,
 } from 'react-icons/fi'
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
 import { IconType } from 'react-icons'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -198,6 +207,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
 
 const Seller = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [products,setProducts]=useState([])
   const token=localStorage.getItem("token")
   const id=localStorage.getItem("userid")
@@ -250,7 +261,10 @@ const Seller = () => {
           <Td>{el.amountAvailable}</Td>
           <Td>
             <Flex gap={'10px'}>
-              <Button bg={'pink.600'} color={'white'}>Edit</Button>
+              <Button bg={'pink.600'} color={'white'} onClick={() => {
+          setSelectedProduct(el);
+          setIsModalOpen(true);
+        }} >Edit</Button>
               <Button bg={'red.600'} color={'white'}>Delete</Button>
             </Flex>
           </Td>
@@ -262,6 +276,22 @@ const Seller = () => {
       </Table>
       </TableContainer>
       </Box>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Product</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+           
+            use client
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }
