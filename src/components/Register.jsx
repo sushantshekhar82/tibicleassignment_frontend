@@ -17,7 +17,7 @@ import {
   Icon,
   Select,
 } from '@chakra-ui/react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useState } from 'react'
 import { useToast } from "@chakra-ui/react";
 import {useDispatch,useSelector} from 'react-redux'
@@ -72,6 +72,7 @@ export default function JoinOurTeam() {
   const [role,setRole]=useState("")
   const toast = useToast();
   const dispatch=useDispatch()
+  const navigate = useNavigate();
   const {loading,message}=useSelector((store)=>store.user)
  
   const handleSubmit=()=>{
@@ -92,6 +93,7 @@ export default function JoinOurTeam() {
             duration: 5000,
             isClosable: true,
          });
+         navigate("/login")
         }
        
       

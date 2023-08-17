@@ -17,7 +17,7 @@ import {
   Icon,
   Select,
 } from '@chakra-ui/react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { useState } from 'react'
 import { useToast } from "@chakra-ui/react";
 import {useDispatch,useSelector} from 'react-redux'
@@ -70,7 +70,7 @@ const Blur = (props) => {
 export default function JoinOurTeam() {
   const [username,setUsername]=useState("")
   const [password,setPassword]=useState("")
- 
+ const navigate=useNavigate()
   const toast = useToast();
   const dispatch=useDispatch()
   const {loading,message}=useSelector((store)=>store.user)
@@ -103,6 +103,14 @@ export default function JoinOurTeam() {
             duration: 3000,
             isClosable: true,
          });
+         localStorage.setItem("token",res.token)
+         localStorage.setItem("role",res.role)
+         localStorage.setItem("user",res.uniqueuser)
+         if(res.role==="buyer"){
+            navigate("/buyer")
+         }else  if(res.role==="seller"){
+            navigate("/seller")
+         }
         }
        
       
