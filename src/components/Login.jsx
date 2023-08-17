@@ -13,9 +13,15 @@ import {
   Avatar,
   AvatarGroup,
   useBreakpointValue,
-  IconProps,
+  
   Icon,
+  Select,
 } from '@chakra-ui/react'
+import {Link} from 'react-router-dom'
+import { useState } from 'react'
+import { useToast } from "@chakra-ui/react";
+import {useDispatch,useSelector} from 'react-redux'
+import { loginuser } from '../redux/login/action';
 
 const avatars = [
   {
@@ -43,9 +49,9 @@ const avatars = [
 const Blur = (props) => {
   return (
     <Icon
-      width={useBreakpointValue({ base: '100%', md: '40vw', lg: '30vw' })}
+      width={useBreakpointValue({ base: '100%', md: '40vw', lg: '25vw' })}
       zIndex={useBreakpointValue({ base: -1, md: -1, lg: 0 })}
-      height="560px"
+      height="540px"
       viewBox="0 0 528 560"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -62,6 +68,60 @@ const Blur = (props) => {
 }
 
 export default function JoinOurTeam() {
+  const [username,setUsername]=useState("")
+  const [password,setPassword]=useState("")
+ 
+  const toast = useToast();
+  const dispatch=useDispatch()
+  const {loading,message}=useSelector((store)=>store.user)
+ 
+  const handleSubmit=()=>{
+    if(username!=="" && password!=="" ){
+      dispatch(loginuser(username,password)).then((res)=>{
+        console.log(res)
+        if(res.message==="Invalid username or password"){
+          toast({
+            title: "Invalid username or password" ,
+        
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+         });
+        }else if(res.message==="Invalid username or password,Please Register first"){
+          toast({
+            title: "No user found, kindly Register " ,
+        
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+         });
+        }
+        else {
+          toast({
+            title: "Login Successful" ,
+             status: "success",
+            duration: 3000,
+            isClosable: true,
+         });
+        }
+       
+      
+       
+      })
+    }else{
+      toast({
+        title: "Enter all fields" ,
+    
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+     });
+     setPassword("")
+    }
+   
+   
+  }
+ 
   return (
     <Box position={'relative'}>
       <Container
@@ -74,11 +134,11 @@ export default function JoinOurTeam() {
           <Heading
             lineHeight={1.1}
             fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
-            Senior web designers{' '}
+            Buy Anything from {' '}
             <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
-              &
+             Vending Machine
             </Text>{' '}
-            Full-Stack Developers
+           and Enjoy 
           </Heading>
           <Stack direction={'row'} spacing={4} align={'center'}>
             <AvatarGroup>
@@ -147,48 +207,48 @@ export default function JoinOurTeam() {
               color={'gray.800'}
               lineHeight={1.1}
               fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-              Join our team
+              Login & Enjoy
               <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">
                 !
               </Text>
             </Heading>
             <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-              We’re looking for amazing engineers just like you! Become a part of our
-              rockstar engineering team and skyrocket your career!
+             We're here to provie you the services to sell your item to local customers and for consumer , they can buy that 
+             item very easily.
             </Text>
           </Stack>
           <Box as={'form'} mt={10}>
             <Stack spacing={4}>
               <Input
-                placeholder="Firstname"
+               type={"text"}
+                placeholder="Username/Email"
+                value={username}
                 bg={'gray.100'}
                 border={0}
-                color={'gray.500'}
+                color={'black'}
+                fontWeight='bold'
+                
                 _placeholder={{
                   color: 'gray.500',
                 }}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <Input
-                placeholder="firstname@lastname.io"
+               type={"password"}
+                placeholder="Password"
+                value={password}
                 bg={'gray.100'}
                 border={0}
-                color={'gray.500'}
+                color={'black'}
+                fontWeight='bold'
                 _placeholder={{
                   color: 'gray.500',
                 }}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <Input
-                placeholder="+1 (___) __-___-___"
-                bg={'gray.100'}
-                border={0}
-                color={'gray.500'}
-                _placeholder={{
-                  color: 'gray.500',
-                }}
-              />
-              <Button fontFamily={'heading'} bg={'gray.200'} color={'gray.800'}>
-                Upload CV
-              </Button>
+            
+<Flex justifyContent={'center'}  paddingTop={'10px'}> <Text as={'h1'}>New User {" "}</Text><Link to="/"><Text color={'pink.600'} fontWeight={'bold'}>Register Now</Text></Link></Flex>
+             
             </Stack>
             <Button
               fontFamily={'heading'}
@@ -199,8 +259,11 @@ export default function JoinOurTeam() {
               _hover={{
                 bgGradient: 'linear(to-r, red.400,pink.400)',
                 boxShadow: 'xl',
-              }}>
-              Submit
+              }}
+              disabled={loading}
+              onClick={handleSubmit}
+              >
+              {loading?"Wait...":"Login"}
             </Button>
           </Box>
           form

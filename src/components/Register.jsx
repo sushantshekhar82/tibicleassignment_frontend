@@ -17,6 +17,7 @@ import {
   Icon,
   Select,
 } from '@chakra-ui/react'
+import {Link} from 'react-router-dom'
 import { useState } from 'react'
 import { useToast } from "@chakra-ui/react";
 import {useDispatch,useSelector} from 'react-redux'
@@ -72,7 +73,7 @@ export default function JoinOurTeam() {
   const toast = useToast();
   const dispatch=useDispatch()
   const {loading,message}=useSelector((store)=>store.user)
-  console.log(loading)
+ 
   const handleSubmit=()=>{
     if(username!=="" && password!=="" && role!==""){
       dispatch(postuser(username,password,role)).then((res)=>{
@@ -86,15 +87,14 @@ export default function JoinOurTeam() {
          });
         }else{
           toast({
-            title: res.message ,
-        
-            status: "success",
+            title: "Registration successful" ,
+             status: "success",
             duration: 5000,
             isClosable: true,
          });
         }
        
-      console.log(res.message)
+      
        
       })
     }else{
@@ -105,9 +105,7 @@ export default function JoinOurTeam() {
         duration: 1500,
         isClosable: true,
      });
-     setUsername("")
-       setPassword("")
-       setRole("")
+     setPassword("")
     }
    
    
@@ -204,7 +202,7 @@ export default function JoinOurTeam() {
               </Text>
             </Heading>
             <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-             We're here to provie you the services to sell your item to local consumer and for consumer , they can buy that 
+             We're here to provie you the services to sell your item to local customers and for consumer , they can buy that 
              item very easily.
             </Text>
           </Stack>
@@ -213,10 +211,12 @@ export default function JoinOurTeam() {
               <Input
                type={"text"}
                 placeholder="Username/Email"
+                value={username}
                 bg={'gray.100'}
                 border={0}
                 color={'black'}
                 fontWeight='bold'
+                
                 _placeholder={{
                   color: 'gray.500',
                 }}
@@ -225,6 +225,7 @@ export default function JoinOurTeam() {
               <Input
                type={"password"}
                 placeholder="Password"
+                value={password}
                 bg={'gray.100'}
                 border={0}
                 color={'black'}
@@ -244,6 +245,7 @@ export default function JoinOurTeam() {
   <option value='seller'>Seller </option>
  
 </Select>
+<Flex justifyContent={'center'}  paddingTop={'10px'}> <Text as={'h1'}>Already Our member</Text><Link to="/login"><Text color={'pink.600'} fontWeight={'bold'}>Login Now</Text></Link></Flex>
              
             </Stack>
             <Button
@@ -259,7 +261,7 @@ export default function JoinOurTeam() {
               disabled={loading}
               onClick={handleSubmit}
               >
-              Submit
+              {loading?"Wait...":"Submit"}
             </Button>
           </Box>
           form
