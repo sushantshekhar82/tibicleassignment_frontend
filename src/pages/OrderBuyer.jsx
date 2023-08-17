@@ -133,6 +133,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen,...rest }) => {
   const navigate=useNavigate()
+  const adminUsername=localStorage.getItem('user')
   const handleSignOut=()=>{
     localStorage.removeItem("token")
     localStorage.removeItem("role")
@@ -140,7 +141,7 @@ const MobileNav = ({ onOpen,...rest }) => {
     
     navigate("/login")
   }
- console.log("rest",rest)
+
 
      
   return (
@@ -232,7 +233,7 @@ const [deposit,setDeposit]=useState(0)
 const [amount, setAmount] = useState("");
 
 const handleDeposit = async () => {
-    console.log(amount)
+   
     if(amount==5||amount==10||amount==20||amount==50||amount==100){
         try {
   
@@ -272,14 +273,14 @@ const handleDeposit = async () => {
   })
       .then((res) => res.json())
       .then((res) => {
-       console.log(res)
+       
          setProducts(res)
         
       })
       fetch(`  http://localhost:8080/api/user/${id}`)
       .then((res) => res.json())
       .then((res) => {
-       console.log(res)
+     
          setDeposit(res.deposit)
         
       })

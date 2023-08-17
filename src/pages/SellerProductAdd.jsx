@@ -121,6 +121,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const navigate=useNavigate()
+  const adminUsername=localStorage.getItem('user')
   const handleSignOut=()=>{
     localStorage.removeItem("token")
     localStorage.removeItem("role")
@@ -206,7 +207,7 @@ const SellerProductAdd = () => {
   const toast = useToast();
   const token = localStorage.getItem("token");
   const handleAddProduct=()=>{
-     console.log(productname,cost,quantity)
+    
      if(productname!=="" && cost!=="" && quantity!==""){
         const productData = {
             productName:productname,

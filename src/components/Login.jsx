@@ -78,7 +78,7 @@ export default function JoinOurTeam() {
   const handleSubmit=()=>{
     if(username!=="" && password!=="" ){
       dispatch(loginuser(username,password)).then((res)=>{
-        console.log(res)
+       
         if(res.message==="Invalid username or password"){
           toast({
             title: "Invalid username or password" ,

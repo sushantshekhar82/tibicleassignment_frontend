@@ -132,6 +132,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen,...rest }) => {
   const navigate=useNavigate()
+  const adminUsername=localStorage.getItem('user')
   const handleSignOut=()=>{
     localStorage.removeItem("token")
     localStorage.removeItem("role")
@@ -139,7 +140,7 @@ const MobileNav = ({ onOpen,...rest }) => {
     
     navigate("/login")
   }
- console.log("rest",rest)
+ 
 
      
   return (
@@ -232,17 +233,18 @@ const [deposit,setDeposit]=useState(0)
   fetch(`http://localhost:8080/api/prod/products`)
       .then((res) => res.json())
       .then((res) => {
-       console.log(res)
+      
          setProducts(res)
         
       })
       fetch(`  http://localhost:8080/api/user/${id}`)
       .then((res) => res.json())
       .then((res) => {
-       console.log(res)
+      
          setDeposit(res.deposit)
         
       })
+
     },[token,count])
 
 const handleBuy=async()=>{
@@ -252,7 +254,7 @@ const handleBuy=async()=>{
       Authorization: `${localStorage.getItem("token")}`
     }
   }).then((res)=>{
-    console.log(res)
+   
     if(res.data.message==="Purchase successful"){
       toast({
         title: "Purchase successful" ,

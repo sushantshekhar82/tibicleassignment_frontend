@@ -130,6 +130,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const navigate=useNavigate()
+  const adminUsername=localStorage.getItem('user')
   const handleSignOut=()=>{
     localStorage.removeItem("token")
     localStorage.removeItem("role")
@@ -242,7 +243,7 @@ const Seller = () => {
         })
           .then((res) => res.json())
           .then((res) => {
-            console.log(res)
+           
             setProductName(res.productName)
             setQuantity(res.amountAvailable)
             setCost(res.cost)
@@ -367,7 +368,7 @@ const Seller = () => {
            <Input marginTop={'20px'} type='text' value={productname} onChange={(e)=>setProductName(e.target.value)} placeholder='Product Name' size='lg' />
            <Input marginTop={'20px'} type='number' value={cost} onChange={(e)=>setCost(e.target.value)} placeholder='Cost' size='lg' />
            <Input marginTop={'20px'} type='number' value={quantity} onChange={(e)=>setQuantity(e.target.value)} placeholder='Quantity' size='lg' />
-           <Button  marginTop={'20px'} bg={'pink.600'} color={'white'} onClick={handleUpdateProduct}>Add Product</Button>
+           <Button  marginTop={'20px'} bg={'pink.600'} color={'white'} onClick={handleUpdateProduct}>Update Product</Button>
               
           </Box>
           </ModalBody>
