@@ -233,7 +233,7 @@ const [amount, setAmount] = useState("");
 
 const handleDeposit = async () => {
     console.log(amount)
-    if(amount==5||amount==10||amount==20||amount==50||amount==10){
+    if(amount==5||amount==10||amount==20||amount==50||amount==100){
         try {
   
             await axios.post(`http://localhost:8080/api/vending-machine/deposit`, { coins: [parseInt(amount)] }, {

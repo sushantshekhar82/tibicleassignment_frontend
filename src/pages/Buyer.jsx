@@ -32,6 +32,7 @@ import {
   Button,
   Input,
   useToast,
+  FormControl,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -55,6 +56,7 @@ import {
 import { IconType } from 'react-icons'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const adminUsername=localStorage.getItem('user')
 
@@ -220,7 +222,7 @@ const Buyer = () => {
   
   const[productname,setProductName]=useState("")
   const[cost,setCost]=useState("")
-  const[quantity,setQuantity]=useState("")
+  const [amount, setAmount] = useState('');
   const toast = useToast();
   const [count,setCount]=useState(0)
   const [loading,setLoading]=useState(false)
@@ -243,7 +245,28 @@ const [deposit,setDeposit]=useState(0)
       })
     },[token,count])
 
+const handleBuy=async()=>{
 
+  await axios.post(`http://localhost:8080/api/vending-machine/buy/${activeid}`, { amount }, {
+    headers: {
+      Authorization: `${localStorage.getItem("token")}`
+    }
+  }).then((res)=>{
+    
+    if(res.data.message==="Purchase successful"){
+      toast({
+        title: "Purchase successful" ,
+    
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+     });
+     setCount(count+1)
+     }
+  })
+ setCount(count+1)
+  setAmount('');
+}
       
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -282,7 +305,11 @@ const [deposit,setDeposit]=useState(0)
           <Td>{el.cost}</Td>
           <Td>{el.amountAvailable}</Td>
           <Td>
-            <Button bg={'green.500'} color={'white'}>Buy</Button>
+            <Button bg={'green.500'} color={'white'} onClick={() => {
+          setSelectedProduct(el);
+          setIsModalOpen(true);
+          setActiveId(el._id)
+        }} >Buy</Button>
           </Td>
         </Tr>
         ))
@@ -298,8 +325,19 @@ const [deposit,setDeposit]=useState(0)
           <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+          <Text as={'h1'} fontSize={'5xl'} fontWeight={'bold'} textAlign={'center'}>Quantity</Text>
            
-         he
+          <VStack spacing={4}>
+        <FormControl>
+         
+        <Input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </FormControl>
+        <Button colorScheme="teal"onClick={handleBuy} >Buy</Button>
+      </VStack>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={() => setIsModalOpen(false)}>
